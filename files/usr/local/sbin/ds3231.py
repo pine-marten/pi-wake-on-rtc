@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 """
+# modded 2024-10-16 RM -
+# 1) converted from Py2 to py3 via https://python2to3.com/ 
+# 2) def _bcd_to_int(bcd) changed to return an int which py3 doesn't and the ocnvert didn't fix
+#
+#
 # --------------------------------------------------------------------------
 # Low-level python interface for the RTC DS3231.
 #
@@ -72,7 +77,7 @@ def _bcd_to_int(bcd):
                 out += value
             digit >>= 1
         out *= 10
-    return out / 10
+    return out // 10 # have to change this from / to // else the float divided by 10 is returned which causes downstream issues
 
 
 def _int_to_bcd(number):
@@ -541,3 +546,4 @@ class ds3231(object):
         addr0 = address % 256
         self._bus.write_i2c_block_data(self._at24c32_addr, addr1, [addr0, value])
         time.sleep(0.20)
+
